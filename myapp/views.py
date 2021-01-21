@@ -1,12 +1,12 @@
 import os
-import platform
 import unittest
 
 from django.shortcuts import redirect, render
 
-from media.documents.BaseAppiumServer import AppiumServer
-from media.documents.BaseRunner import ParametrizedTestCase
-from media.documents.test_appium import EribankTest
+from media.base.BaseAdb import AndroidDebugBridge
+from media.base.BaseAppiumServer import AppiumServer
+from media.base.BaseRunner import ParametrizedTestCase
+from media.tests.test_appium import EribankTest
 from .forms import DocumentForm
 from .models import Document
 
@@ -33,26 +33,22 @@ def my_view(request):
     else:
         form = DocumentForm()  # An empty, unbound form
 
-    # Load documents for the list page
+    # Load base for the list page
     documents = Document.objects.all()
 
-    # Render list page with the documents and the form
-    context = {'documents': documents, 'form': form, 'message': message}
+    # Render list page with the base and the form
+    context = {'base': documents, 'form': form, 'message': message}
     return render(request, 'list.html', context)
 
 
 def kill_adb():
-    if platform.system() == "Windows":
-
-        os.system(PATH("../media/documents/kill5037.bat"))
-    else:
-        os.popen("killall adb")
+    os.system(PATH("../media/base/kill5037.bat"))
     os.system("adb start-server")
 
 
-def runnerPool():
+def runnerPool(device):
     _initApp = {}
-    _initApp['deviceName'] = 'hamrgywwo7zhzlmr'
+    _initApp['deviceName'] = device[0]
     _initApp['platformVersion'] = '10'
     _initApp["platformName"] = "android"
     _initApp["automationName"] = "uiautomator2"
@@ -73,8 +69,9 @@ def runnerCaseApp(device):
 
 def run_view(request):
     kill_adb()
+    device = AndroidDebugBridge().attached_devices()
     appium_server = AppiumServer()
     appium_server.start_server()
-    runnerPool()
+    runnerPool(device)
     appium_server.stop_server()
     return render(request, 'list.html')
