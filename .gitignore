@@ -140,6 +140,3 @@ dmypy.json
 #################### End of Standard Python .gitignore ####################
 # OS X related
 .DS_Store
-
-# minimal-django-file-upload-example related
-media
