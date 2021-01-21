@@ -14,9 +14,6 @@ import threading
 
 
 class AppiumServer:
-    def __init__(self, kwargs=None):
-        self.kwargs = kwargs
-
     def start_server(self):
         """start the appium server
         """

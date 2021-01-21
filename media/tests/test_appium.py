@@ -1,7 +1,4 @@
-import unittest
-from appium import webdriver
-
-from media.documents.BaseRunner import ParametrizedTestCase
+from media.base.BaseRunner import ParametrizedTestCase
 
 
 class EribankTest(ParametrizedTestCase):
