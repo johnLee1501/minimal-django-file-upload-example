@@ -1,6 +1,18 @@
+import os
+import platform
+import unittest
+
 from django.shortcuts import redirect, render
-from .models import Document
+
+from media.documents.BaseAppiumServer import AppiumServer
+from media.documents.BaseRunner import ParametrizedTestCase
+from media.documents.test_appium import EribankTest
 from .forms import DocumentForm
+from .models import Document
+
+PATH = lambda p: os.path.abspath(
+    os.path.join(os.path.dirname(__file__), p)
+)
 
 
 def my_view(request):
@@ -27,3 +39,42 @@ def my_view(request):
     # Render list page with the documents and the form
     context = {'documents': documents, 'form': form, 'message': message}
     return render(request, 'list.html', context)
+
+
+def kill_adb():
+    if platform.system() == "Windows":
+
+        os.system(PATH("../media/documents/kill5037.bat"))
+    else:
+        os.popen("killall adb")
+    os.system("adb start-server")
+
+
+def runnerPool():
+    _initApp = {}
+    _initApp['deviceName'] = 'hamrgywwo7zhzlmr'
+    _initApp['platformVersion'] = '10'
+    _initApp["platformName"] = "android"
+    _initApp["automationName"] = "uiautomator2"
+    _initApp["appPackage"] = 'com.experitest.ExperiBank'
+    _initApp["appActivity"] = 'com.experitest.ExperiBank.LoginActivity'
+    _initApp['unicodeKeyboard'] = True
+    _initApp['resetKeyboard'] = True
+    _initApp['androidScreenshotPath'] = '/storage/emulated/0/Pictures/Screenshots/'
+
+    runnerCaseApp(_initApp)
+
+
+def runnerCaseApp(device):
+    suite = unittest.TestSuite()
+    suite.addTest(ParametrizedTestCase.parametrize(EribankTest, param=device))
+    unittest.TextTestRunner(verbosity=2).run(suite)
+
+
+def run_view(request):
+    kill_adb()
+    appium_server = AppiumServer()
+    appium_server.start_server()
+    runnerPool()
+    appium_server.stop_server()
+    return render(request, 'list.html')
