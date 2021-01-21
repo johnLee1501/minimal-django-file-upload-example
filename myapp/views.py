@@ -10,7 +10,8 @@ def my_view(request):
     if request.method == 'POST':
         form = DocumentForm(request.POST, request.FILES)
         if form.is_valid():
-            newdoc = Document(docfile=request.FILES['docfile'])
+            newdoc = Document(docfile=request.FILES['docfile'], name=request.POST['name'],
+                              class_name=request.POST['class_name'])
             newdoc.save()
 
             # Redirect to the document list after POST

@@ -30,8 +30,16 @@
                 {{ form.docfile.errors }}
                 {{ form.docfile }}
             </p>
+             <p>
+                 {{ form.name.label }}
+                {{ form.name }}
+            </p>
+             <p>
+                 {{ form.class_name.label }}
+                {{ form.class_name }}
+            </p>
 
-            <p><input type="submit" value="Upload"/></p>
+            <button type="submit" class="btn btn-success btn-lg">Registrar usuario</button>
         </form>
     </body>
 </html>
