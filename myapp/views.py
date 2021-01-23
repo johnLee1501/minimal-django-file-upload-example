@@ -25,13 +25,13 @@ def my_view(request):
             newdoc = Document(docfile=request.FILES['docfile'], name=request.POST['name'],
                               class_name=request.POST['class_name'])
             archivo_ruta = newdoc.docfile
-            archivo = (PATH("../media/documents") + "\\" + str(archivo_ruta))
+            archivo_pos = (PATH("../media/documents") + "\\" + str(archivo_ruta))
             guardado = 'documents/' + str(archivo_ruta)
             if Document.objects.filter(docfile=guardado):
                 print('CAMBIA EL NOMBRE DEL ARCHIVO')
             else:
                 newdoc.save()
-                os.system('adb push ' + archivo + ' /mnt/sdcard/')
+                os.system('adb push ' + archivo_pos + ' /mnt/sdcard/')
 
             # Redirect to the document list after POST
             return redirect('my-view')
