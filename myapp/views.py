@@ -24,7 +24,12 @@ def my_view(request):
         if form.is_valid():
             newdoc = Document(docfile=request.FILES['docfile'], name=request.POST['name'],
                               class_name=request.POST['class_name'])
+            archivo_ruta = newdoc.docfile
+            archivo = (PATH("../media/documents") + "\\" + str(archivo_ruta))
             newdoc.save()
+            os.system('adb push ' + archivo + ' /mnt/sdcard/')
+
+            # archivo()
 
             # Redirect to the document list after POST
             return redirect('my-view')
@@ -73,6 +78,7 @@ def runnerCaseApp(device):
 
 def run_view(request):
     kill_adb()
+    # archivo()
     appium_server = AppiumServer()
     appium_server.start_server()
     runnerPool()
