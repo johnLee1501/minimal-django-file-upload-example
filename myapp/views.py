@@ -26,10 +26,12 @@ def my_view(request):
                               class_name=request.POST['class_name'])
             archivo_ruta = newdoc.docfile
             archivo = (PATH("../media/documents") + "\\" + str(archivo_ruta))
-            newdoc.save()
-            os.system('adb push ' + archivo + ' /mnt/sdcard/')
-
-            # archivo()
+            guardado = 'documents/' + str(archivo_ruta)
+            if Document.objects.filter(docfile=guardado):
+                print('CAMBIA EL NOMBRE DEL ARCHIVO')
+            else:
+                newdoc.save()
+                os.system('adb push ' + archivo + ' /mnt/sdcard/')
 
             # Redirect to the document list after POST
             return redirect('my-view')
@@ -78,7 +80,6 @@ def runnerCaseApp(device):
 
 def run_view(request):
     kill_adb()
-    # archivo()
     appium_server = AppiumServer()
     appium_server.start_server()
     runnerPool()
