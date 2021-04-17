@@ -2,20 +2,20 @@
 <html>
     <head>
         <meta charset="utf-8">
-        <title>Minimal Django File Upload Example</title>
+        <title>Save csv in database</title>
     </head>
 
     <body>
         <!-- List of uploaded documents -->
-        {% if documents %}
-            All documents in the database:
+        {% if employes %}
+            Empleados:
             <ul>
-                {% for document in documents %}
-                    <li><a href="{{ document.docfile.url }}">{{ document.docfile.name }}</a></li>
+                {% for employe in employes %}
+                    <li><a>{{ employe.fullname }}</a></li>
                 {% endfor %}
             </ul>
         {% else %}
-            <p>No documents.</p>
+            <p>No hay empleados registrados.</p>
         {% endif %}
 
         <!-- Upload form. Note enctype attribute! -->
@@ -24,21 +24,12 @@
             {{ message }}
             <p>{{ form.non_field_errors }}</p>
 
-            <p>{{ form.docfile.label_tag }} {{ form.docfile.help_text }}</p>
+            <p>{{ form.csv.label_tag }} {{ form.csv.help_text }}</p>
 
             <p>
-                {{ form.docfile.errors }}
-                {{ form.docfile }}
+                {{ form.csv.errors }}
+                {{ form.csv }}
             </p>
-             <p>
-                 {{ form.name.label }}
-                {{ form.name }}
-            </p>
-             <p>
-                 {{ form.class_name.label }}
-                {{ form.class_name }}
-            </p>
-
             <button type="submit" class="btn btn-success btn-lg">Registrar usuario</button>
         </form>
     </body>
